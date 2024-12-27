@@ -9,25 +9,54 @@
         <div class="left-card-container">
             <h2 class="card-title" style="font-size:22px; color: #821616; padding-top:5px;">Payment</h2>
             <h3 class="card-text" style="font-size:14px; color: #84949E; margin-top:20px">Please make sure the filled information is correct.</h3>
-            <div class="input-container" style="margin-top:20px;">
-                <div class="input-billedto-container">
-                    <h4 class="card-text2" style="font-size:14px; color:#606060;">Billed to</h4>
-                    <input class="input-fullname" type="text" placeholder="Full name" aria-label="input-fullname" name="fullname" required> 
-                    <input class="input-cardnum" type="number" placeholder="Card Number" aria-label="input-cardnum" name="card_number" maxlength="16" required>
-                    <div class="cc-input" style="display: flex; gap: 10px;">
-                        <input class="input-MMYY" type="text" placeholder="MM / YY" aria-label="input-MMYY" required style="flex: 1;">
-                        <input class="input-CVV" type="number" placeholder="CVV" aria-label="input-CVV" maxlength="3" required style="flex: 1;">
+            <form id="paymentForm" action="/process-payment" method="POST" novalidate>
+                @csrf
+                <div class="input-container" style="margin-top: 20px;">
+                    <div class="input-billedto-container">
+                        <h4 class="card-text2" style="font-size:14px; color:#606060;">Billed to</h4>
+                        <input type="text" id="paymentFullname" name="fullname" class="form-control" placeholder="Full name" value="{{ old('fullname') }}" required>
+                        @error('fullname')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                        <input type="text" id="paymentCardNum" name="CardNum" class="form-control" placeholder="Card Number" value="{{ old('cardNum') }}" required maxlength="16" pattern="\d{16}" title="Enter a 16-digit card number">
+                        @error('cardNum')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                        <div class="cc-input" style="display: flex; gap: 10px;">
+                            <input type="text" id="signupMMYY" name="expiry_date" class="form-control" placeholder="MM / YY" value="{{ old('expiry_date') }}" required pattern="(0[1-9]|1[0-2])\/\d{2}" title="Enter expiration date in MM/YY format (e.g., 12/24)">
+                            @error('expiry_date')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+
+                            <input type="text" id="signupCVV" name="cvv" class="form-control" placeholder="CVV" value="{{ old('cvv') }}" required pattern="\d{3}" maxlength="3" title="Enter a 3-digit CVV">
+                            @error('cvv')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="input-country-container">
+                        <h4 class="card-text2" style="font-size:14px;color:#606060;">Country</h4>
+                        <input type="text" id="signupCountry" name="country" class="form-control" placeholder="Country" value="{{ old('country') }}" required>
+                        @error('country')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                        <input type="text" id="signupZip" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}" required pattern="\d{5}(-\d{4})?" title="Enter a valid Zip Code (e.g. 12345 or 12345-6789)">
+                        @error('zip_code')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="total-price-container">
+                        <h1 style="font-size:27px; margin-top:20px; margin-bottom:20px;">IDR. {{ number_format($booking->total_price, 0, ',', '.') }}</h1>
                     </div>
                 </div>
-                <div class="input-country-container">
-                    <h4 class="card-text2" style="font-size:14px;color:#606060;">Country</h4>
-                    <input class="input-country" type="text" placeholder="Country" aria-label="input-country" required>
-                    <input class="input-zip" type="number" placeholder="Zip Code" aria-label="input-zip" required>
-                </div>
-                <div class="total-price-container">
-                    <h1 style="font-size:27px; margin-top:20px;margin-bottom:20px;">IDR. {{ number_format($booking->total_price, 0, ',', '.') }}</h1>
-                </div>
-            </div>
+
+            </form>
+
+
         </div>
         </div>
         <div class="col-sm-6" >
@@ -60,14 +89,30 @@
     </div>
 </div>
 
+
 <div class="button-container">
     <div class="hehe" style="height: 100px; text-align: center; color: #821616; padding:10px">
-        <a href="{{ route('paymentSuccess') }}" class="btn" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</a>
+        <!-- <a href="{{ route('paymentSuccess') }}" class="btn" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</a> -->
+        <button type="submit" id="submitButton" class="btn btn-primary" href="{{ route('paymentSuccess') }}" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</button>
     </div>
 </div>
 
 
 @endsection
+
+<script>
+    document.getElementById('paymentForm').addEventListener('submit', function (event) {
+        let form = event.target;
+        
+        if (!form.checkValidity()) {
+            event.preventDefault(); // Stop form submission
+            event.stopPropagation();
+            alert('Please fill out all required fields correctly before proceeding.');
+        }
+
+        form.classList.add('was-validated'); // Add Bootstrap validation styles
+    });
+</script>
 
 
 <script>
