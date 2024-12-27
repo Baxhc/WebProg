@@ -102,9 +102,9 @@ class PageController extends Controller
         return view("bookTour", ['booking'=>$booking]);
     }
 
-    public function showPaymentPage()
+    public function showSuccess()
     {
-        return view('payment'); // The sign-up form view
+        return view('paymentSuccess');
     }
 
     public function refund($booking_id, $tour_id, $price, $customer_id){

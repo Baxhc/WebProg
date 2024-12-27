@@ -62,7 +62,7 @@
 
 <div class="button-container">
     <div class="hehe" style="height: 100px; text-align: center; color: #821616; padding:10px">
-        <a href="#" class="btn" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</a>
+        <a href="{{ route('paymentSuccess') }}" class="btn" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</a>
     </div>
 </div>
 

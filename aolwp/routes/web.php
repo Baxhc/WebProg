@@ -28,8 +28,8 @@ Route::post('/bookTour/{id}', [PageController::class, 'bookTour'])
     ->where('id', '[0-9]+') // Ensure `id` is numeric
     ->name('bookTour');
 
-// Payment page
-Route::get('/payment', [PageController::class, 'showPaymentPage'])->name('paymentPage');
+// Payment Success Page
+Route::get('/payment_success', [PageController::class, 'showSuccess'])->name('paymentSuccess');
 
 // ========================== AUTH ROUTES ================================
 
