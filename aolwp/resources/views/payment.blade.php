@@ -25,7 +25,7 @@
                     <input class="input-zip" type="number" placeholder="Zip Code" aria-label="input-zip" required>
                 </div>
                 <div class="total-price-container">
-                    <h1 style="font-size:27px; margin-top:20px;margin-bottom:20px;">Rp. 3.000.000</h1>
+                    <h1 style="font-size:27px; margin-top:20px;margin-bottom:20px;">{{ $booking->total_price }}</h1>
                 </div>
             </div>
         </div>
