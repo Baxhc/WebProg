@@ -102,7 +102,7 @@ class PageController extends Controller
         return view("bookTour", ['booking'=>$booking]);
     }
 
-    public function showSuccess()
+    public function paymentSuccess()
     {
         return view('paymentSuccess');
     }

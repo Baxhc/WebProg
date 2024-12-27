@@ -2,118 +2,118 @@
 @section('title', 'Book Now')
 
 @section('content')
-
-<div class="payment-container">
-    <div class="row">
-        <div class="col-sm-6" style="background-color: #EAEAEA; border-radius:5px;">
-        <div class="left-card-container">
-            <h2 class="card-title" style="font-size:22px; color: #821616; padding-top:5px;">Payment</h2>
-            <h3 class="card-text" style="font-size:14px; color: #84949E; margin-top:20px">Please make sure the filled information is correct.</h3>
-            <form id="paymentForm" action="/process-payment" method="POST" novalidate>
-                @csrf
-                <div class="input-container" style="margin-top: 20px;">
-                    <div class="input-billedto-container">
-                        <h4 class="card-text2" style="font-size:14px; color:#606060;">Billed to</h4>
-                        <input type="text" id="paymentFullname" name="fullname" class="form-control" placeholder="Full name" value="{{ old('fullname') }}" required>
-                        @error('fullname')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-
-                        <input type="text" id="paymentCardNum" name="CardNum" class="form-control" placeholder="Card Number" value="{{ old('cardNum') }}" required maxlength="16" pattern="\d{16}" title="Enter a 16-digit card number">
-                        @error('cardNum')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-
-                        <div class="cc-input" style="display: flex; gap: 10px;">
-                            <input type="text" id="signupMMYY" name="expiry_date" class="form-control" placeholder="MM / YY" value="{{ old('expiry_date') }}" required pattern="(0[1-9]|1[0-2])\/\d{2}" title="Enter expiration date in MM/YY format (e.g., 12/24)">
-                            @error('expiry_date')
+<form id="paymentForm" action="{{ route('paymentSuccess') }}" method="POST" novalidate>
+    @csrf
+    <div class="payment-container">
+        <div class="row">
+            <div class="col-sm-6" style="background-color: #EAEAEA; border-radius:5px;">
+            <div class="left-card-container">
+                <h2 class="card-title" style="font-size:22px; color: #821616; padding-top:5px;">Payment</h2>
+                <h3 class="card-text" style="font-size:14px; color: #84949E; margin-top:20px">Please make sure the filled information is correct.</h3>
+                    <div class="input-container" style="margin-top:20px;">
+                        <div class="input-billedto-container">
+                            <h4 class="card-text2" style="font-size:14px; color:#606060;">Billed to</h4>
+                            <input type="text" id="paymentFullname" name="fullname" class="form-control" placeholder="Full name" value="{{ old('fullname') }}" required>
+                            @error('fullname')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
 
-                            <input type="text" id="signupCVV" name="cvv" class="form-control" placeholder="CVV" value="{{ old('cvv') }}" required pattern="\d{3}" maxlength="3" title="Enter a 3-digit CVV">
-                            @error('cvv')
+                            <input type="text" id="paymentCardNum" name="CardNum" class="form-control" placeholder="Card Number" value="{{ old('cardNum') }}" required maxlength="16" pattern="\d{16}" title="Enter a 16-digit card number">
+                            @error('cardNum')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+
+                            <div class="cc-input" style="display: flex; gap: 10px;">
+                                <input type="text" id="signupMMYY" name="expiry_date" class="form-control" placeholder="MM/YY" value="{{ old('expiry_date') }}" required title="Enter expiration date in MM/YY format (e.g., 12/24)">
+                                @error('expiry_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+
+                                <input type="text" id="signupCVV" name="cvv" class="form-control" placeholder="CVV" value="{{ old('cvv') }}" required pattern="\d{3}" maxlength="3" title="Enter a 3-digit CVV">
+                                @error('cvv')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="input-country-container">
+                            <h4 class="card-text2" style="font-size:14px;color:#606060;">Country</h4>
+                            <input type="text" id="signupCountry" name="country" class="form-control" placeholder="Country" value="{{ old('country') }}" required>
+                            @error('country')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+
+                            <input type="text" id="signupZip" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}" required pattern="\d{5}" title="Enter a valid Zip Code (e.g. 12345)">
+                            @error('zip_code')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
-                    <div class="input-country-container">
-                        <h4 class="card-text2" style="font-size:14px;color:#606060;">Country</h4>
-                        <input type="text" id="signupCountry" name="country" class="form-control" placeholder="Country" value="{{ old('country') }}" required>
-                        @error('country')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-
-                        <input type="text" id="signupZip" name="zip_code" class="form-control" placeholder="Zip Code" value="{{ old('zip_code') }}" required pattern="\d{5}(-\d{4})?" title="Enter a valid Zip Code (e.g. 12345 or 12345-6789)">
-                        @error('zip_code')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <div class="total-price-container">
+                            <h1 style="font-size:27px; margin-top:20px; margin-bottom:20px;">IDR. {{ number_format($booking->total_price, 0, ',', '.') }}</h1>
+                        </div>
                     </div>
 
-                    <div class="total-price-container">
-                        <h1 style="font-size:27px; margin-top:20px; margin-bottom:20px;">IDR. {{ number_format($booking->total_price, 0, ',', '.') }}</h1>
-                    </div>
-                </div>
-
-            </form>
-
-
-        </div>
-        </div>
-        <div class="col-sm-6" >
-            <div class="card w-100" style="background-color: #EAEAEA;border:none;">
-                <div class="card-body">
-                    <h1 class="card-title" style="font-size:22px; color: #821616;">Package Details</h2>
-                    <h2 class="tour-name" style="font-size:14px;">Tour Name:</h2>
-                    <p class="card-text" style="font-size:14px;">3-Day Halong Bay Tour with Cruise.</p>
-                    <h2 style="font-size:14px;">Tour Highlights</h2>
-                    <ul style="font-size:14px;">
-                        <li>Guided visits to Sung Sot Cave, Ti Top Island, and Cat Ba Island.</li>
-                        <li>Kayaking in Trung Trang Cave and Vung Vieng Floating Village.</li>
-                        <li>Overnight luxury cruise accommodations with meals included.</li>
-                        <li>Tai Chi sessions and optional cooking class.</li>
-                    </ul>
-                
-                </div>
             </div>
+            </div>
+            <div class="col-sm-6" >
+                <div class="card w-100" style="background-color: #EAEAEA;border:none;">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size:22px; color: #821616;">Package Details</h2>
+                        <h2 class="tour-name" style="font-size:14px;">Tour Name:</h2>
+                        <p class="card-text" style="font-size:14px;">3-Day Halong Bay Tour with Cruise.</p>
+                        <h2 style="font-size:14px;">Tour Highlights</h2>
+                        <ul style="font-size:14px;">
+                            <li>Guided visits to Sung Sot Cave, Ti Top Island, and Cat Ba Island.</li>
+                            <li>Kayaking in Trung Trang Cave and Vung Vieng Floating Village.</li>
+                            <li>Overnight luxury cruise accommodations with meals included.</li>
+                            <li>Tai Chi sessions and optional cooking class.</li>
+                        </ul>
+                    
+                    </div>
+                </div>
 
-            <div class="card w-100" style="margin-top:10px;background-color: #EAEAEA; border:none;">
-                <div class="card-body">
-                    <h5 class="card-title"style="font-size:22px; color: #821616">Payment Summary</h5>
-                    <ul style="font-size:14px;">
-                    <li><strong>Total Cost: </strong>IDR {{ number_format($booking->total_price, 0, ',', '.') }}</li>
-                        <li id="halfPriceList"></li>
-                    </ul>
+                <div class="card w-100" style="margin-top:10px;background-color: #EAEAEA; border:none;">
+                    <div class="card-body">
+                        <h5 class="card-title"style="font-size:22px; color: #821616">Payment Summary</h5>
+                        <ul style="font-size:14px;">
+                        <li><strong>Total Cost: </strong>IDR {{ number_format($booking->total_price, 0, ',', '.') }}</li>
+                            <li id="halfPriceList"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-
-<div class="button-container">
-    <div class="hehe" style="height: 100px; text-align: center; color: #821616; padding:10px">
-        <!-- <a href="{{ route('paymentSuccess') }}" class="btn" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</a> -->
-        <button type="submit" id="submitButton" class="btn btn-primary" href="{{ route('paymentSuccess') }}" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</button>
+    <div class="button-container">
+        <div class="hehe" style="height: 100px; text-align: center; color: #821616; padding:10px">
+            <button type="submit" class="btn btn-outline-success w-100" style="background-color: #821616; font-size:24px; color: #fff; padding:10px 100px">Complete</button>
+        </div>
     </div>
-</div>
-
+</form>
 
 @endsection
-
+<!-- 
 <script>
-    document.getElementById('paymentForm').addEventListener('submit', function (event) {
-        let form = event.target;
+    document.getElementById('submitButton').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent the default behavior of the button
+
+        var form = document.getElementById('paymentForm');
         
-        if (!form.checkValidity()) {
-            event.preventDefault(); // Stop form submission
-            event.stopPropagation();
-            alert('Please fill out all required fields correctly before proceeding.');
+        // Check if the form is valid
+        if (form.checkValidity()) {
+            form.submit(); // Submit the form if valid
+        } else {
+            form.reportValidity(); // Show validation errors if form is invalid
+
+            // Focus and highlight the first invalid field
+            var firstInvalidField = form.querySelector(':invalid');
+            if (firstInvalidField) {
+                firstInvalidField.focus(); // Focus on the first invalid field
+                firstInvalidField.classList.add('invalid-field'); // Optional: Add custom styling to highlight
+            }
         }
-
-        form.classList.add('was-validated'); // Add Bootstrap validation styles
     });
-</script>
-
+</script> -->
 
 <script>
     var totalPrice = {{ $booking->total_price }};
@@ -216,6 +216,11 @@
         max-width: 600px;
         padding:10px;
         border-radius: 5px;
+    }
+    
+    .invalid-field {
+        border: 2px solid red; /* Red border to highlight the invalid field */
+        background-color: #ffcccc; /* Light red background for visibility */
     }
 
 </style>

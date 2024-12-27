@@ -29,7 +29,9 @@ Route::post('/bookTour/{id}', [PageController::class, 'bookTour'])
     ->name('bookTour');
 
 // Payment Success Page
-Route::get('/payment_success', [PageController::class, 'showSuccess'])->name('paymentSuccess');
+Route::get('/payment_success', [PageController::class, 'paymentSuccess'])->name('paymentSuccess');
+Route::post('/payment_success', [PageController::class, 'paymentSuccess'])->name('paymentSuccess');
+
 
 // ========================== AUTH ROUTES ================================
 
